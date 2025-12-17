@@ -15,6 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh "go build main.go"
+                sh 'docker build -t myapp:latest .'
             }
         }
 
@@ -22,13 +23,17 @@ pipeline {
             steps {
                 withCredentials(
                     [sshUserPrivateKey(
-                        credentialsId: '6732d61e-e9f4-45a9-ae56-2948c90801f4', 
+                        credentialsId: '44ee519e-35c3-4f29-b0ce-28f9c909caff', 
                         keyFileVariable: 'FILENAME', 
                         usernameVariable: 'USERNAME'
                     )]
                 ) {
-                    sh 'chmod 755 ./deploy.sh'
-                    sh './deploy.sh'
+                    sh 'docker save myapp:latest | ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@docker "docker load"'
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@docker """
+                        docker run --publish 4444:4444 myapp:latest
+                    """
+                    '''
                 }
             }
         }
