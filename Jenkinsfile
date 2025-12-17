@@ -27,25 +27,23 @@ pipeline {
                         usernameVariable: 'USERNAME'
                     )]
                 ) {
-                    sh 'ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target "sudo systemctl stop myapp" || true' 
-                    sh 'scp -o StrictHostKeyChecking=no -i ${FILENAME} main ${USERNAME}@target:'
-
                     sh '''
-                        scp -o StrictHostKeyChecking=no -i ${FILENAME} myapp.service \
-                        ${USERNAME}@target:/tmp/myapp.service
+                    ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target \
+                      "sudo systemctl stop myapp || true"
                     '''
-
+        
                     sh '''
-                        ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target << 'EOF'
-                            sudo systemctl stop myapp || true
-            
-                            sudo mv /tmp/myapp.service /etc/systemd/system/myapp.service
-                            sudo chmod 644 /etc/systemd/system/myapp.service
-            
-                            sudo systemctl daemon-reload
-                            sudo systemctl enable myapp
-                            sudo systemctl restart myapp
-                        EOF
+                    scp -o StrictHostKeyChecking=no -i ${FILENAME} myapp.service \
+                      ${USERNAME}@target:/tmp/myapp.service
+                    '''
+        
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target \
+                      "sudo mv /tmp/myapp.service /etc/systemd/system/myapp.service && \
+                       sudo chmod 644 /etc/systemd/system/myapp.service && \
+                       sudo systemctl daemon-reload && \
+                       sudo systemctl enable myapp && \
+                       sudo systemctl restart myapp"
                     '''
                 }
             }
