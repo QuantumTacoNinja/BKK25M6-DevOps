@@ -1,0 +1,13 @@
+[Unit]
+Description=My Go App
+After=network.target
+
+[Service]
+Type=simple
+User=myapp
+ExecStart=/home/laborant/main
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
