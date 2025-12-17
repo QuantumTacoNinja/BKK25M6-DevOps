@@ -27,6 +27,7 @@ pipeline {
                         usernameVariable: 'USERNAME'
                     )]
                 ) {
+                    sh 'chmod 755 ./deploy.sh'
                     sh './deploy.sh'
                 }
             }
