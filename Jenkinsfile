@@ -33,17 +33,23 @@ pipeline {
                     '''
         
                     sh '''
-                    scp -o StrictHostKeyChecking=no -i ${FILENAME} myapp.service \
-                      ${USERNAME}@target:/tmp/myapp.service
+                    scp -o StrictHostKeyChecking=no -i ${FILENAME} myapp.service \${USERNAME}@target:/tmp/myapp.service
+                    scp -o StrictHostKeyChecking=no -i ${FILENAME} main \${USERNAME}@target:/tmp/main
                     '''
         
                     sh '''
-                    ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target \
-                      "sudo mv /tmp/myapp.service /etc/systemd/system/myapp.service && \
-                       sudo chmod 644 /etc/systemd/system/myapp.service && \
-                       sudo systemctl daemon-reload && \
-                       sudo systemctl enable myapp && \
-                       sudo systemctl restart myapp"
+                    ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target "
+                        sudo mkdir -p /opt/myapp &&
+                        sudo mv /tmp/main /opt/myapp/main &&
+                        sudo chown myapp:myapp /opt/myapp/main &&
+                        sudo chmod 755 /opt/myapp/main &&
+
+                        sudo mv /tmp/myapp.service /etc/systemd/system/myapp.service &&
+                        sudo chmod 644 /etc/systemd/system/myapp.service &&
+
+                        sudo systemctl daemon-reload &&
+                        sudo systemctl enable myapp &&
+                        sudo systemctl restart myapp
                     '''
                 }
             }
