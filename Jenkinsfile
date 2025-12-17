@@ -49,7 +49,7 @@ pipeline {
 
                         sudo systemctl daemon-reload &&
                         sudo systemctl enable myapp &&
-                        sudo systemctl restart myapp
+                        sudo systemctl restart myapp"
                     '''
                 }
             }
