@@ -36,7 +36,8 @@ pipeline {
                     scp -o StrictHostKeyChecking=no -i ${FILENAME} myapp.service \${USERNAME}@target:/tmp/myapp.service
                     scp -o StrictHostKeyChecking=no -i ${FILENAME} main \${USERNAME}@target:/tmp/main
                     '''
-        
+
+                    sh '''
                     ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target "
                     # Create system user if it doesn't exist
                     sudo id -u myapp &>/dev/null || sudo useradd -r -s /bin/false myapp
@@ -56,6 +57,7 @@ pipeline {
                     sudo systemctl enable myapp
                     sudo systemctl restart myapp
                     "
+                    '''
                 }
             }
         }
