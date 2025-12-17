@@ -22,7 +22,7 @@ pipeline {
             steps {
                 withCredentials(
                     [sshUserPrivateKey(
-                        credentialsId: '423c6206-8e7f-4b54-911b-95600c9c7a80', 
+                        credentialsId: '8ad6cc3a-611a-4899-82a5-d37317ba1973', 
                         keyFileVariable: 'FILENAME', 
                         usernameVariable: 'USERNAME'
                     )]
