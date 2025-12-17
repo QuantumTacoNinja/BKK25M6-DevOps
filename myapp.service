@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=myapp
+ExecStartPre=/usr/sbin/id -u myapp || /usr/sbin/useradd -r -s /bin/false myapp
 ExecStart=/opt/myapp/main
 Restart=always
 RestartSec=5
