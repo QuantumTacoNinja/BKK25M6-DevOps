@@ -13,3 +13,6 @@ Worapat Hongsetong
 4. Create a deployment pipeline for Kubernetes
    - Completed
    - Branch: k8s
+5. Create a deployment to AWS EC2 instance
+   - Completed
+   - Branch: aws
