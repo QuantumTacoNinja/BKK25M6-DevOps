@@ -29,5 +29,14 @@ pipeline {
                 sh "docker push ttl.sh/myapp2:1h"
             }
         }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                 withKubeConfig([credentialsId: 'myapikey', serverUrl: 'https://kubernetes:6443']) {
+                  sh 'kubectl apply -f deployment.yaml'
+                  sh 'kubectl apply -f service.yaml'
+                }
+            }
+        }
     }
 }
