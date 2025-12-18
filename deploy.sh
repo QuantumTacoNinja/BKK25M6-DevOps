@@ -1,11 +1,13 @@
 #!/bin/bash
 
-ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target "sudo systemctl stop myapp || true"
-        
-scp -o StrictHostKeyChecking=no -i ${FILENAME} myapp.service \${USERNAME}@target:/tmp/myapp.service
-scp -o StrictHostKeyChecking=no -i ${FILENAME} main \${USERNAME}@target:/tmp/main
+HOST_IP="ec2-13-236-146-184.ap-southeast-2.compute.amazonaws.com"
 
-ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@target "
+ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@${HOST_IP} "sudo systemctl stop myapp || true"
+        
+scp -o StrictHostKeyChecking=no -i ${FILENAME} myapp.service ${USERNAME}@${HOST_IP}:/tmp/myapp.service
+scp -o StrictHostKeyChecking=no -i ${FILENAME} main ${USERNAME}@${HOST_IP}:/tmp/main
+
+ssh -o StrictHostKeyChecking=no -i ${FILENAME} ${USERNAME}@${HOST_IP} "
 # Create system user if it doesn't exist
 sudo id -u myapp &>/dev/null || sudo useradd -r -s /bin/false myapp
 
