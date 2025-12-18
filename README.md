@@ -10,3 +10,6 @@ Worapat Hongsetong
 3. Create a build and deployment pipeline with Docker
    - Completed
    - Branch: docker
+4. Create a deployment pipeline for Kubernetes
+   - Completed
+   - Branch: k8s
